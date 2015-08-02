@@ -35,7 +35,7 @@ var Dot = function(centerX, centerY, centerZ, radius, color) {
         context.beginPath();
         var scale = focallength/(focallength + this.vz);
         context.arc(canvas.width/2 + (this.vx-canvas.width/2)*scale, canvas.height/2 + (this.vy-canvas.height/2) * scale, this.radius*scale, 0, 2*Math.PI);
-        context.fillStyle = 'rgba(' + this.color + ',' + scale + ')';
+        context.fillStyle = `rgba(${this.color}, ${scale})`;
         context.fill()
         context.restore();
 	}
@@ -130,12 +130,12 @@ $.partdem = function(elem, options, arg) {
 			gap = options.gap;
     	var img = new Image;
 		img.onload = function() {
-				var dots = [],
-					data;
-				var width = parseInt(img.width),
-					height = parseInt(img.height);
-				context.drawImage(img, canvas.width/2 - width/2, canvas.height/2 - height/2);
-				data = context.getImageData(0, 0, canvas.width, canvas.height);
+			var dots = [],
+				data;
+			var width = parseInt(img.width),
+				height = parseInt(img.height);
+			context.drawImage(img, canvas.width/2 - width/2, canvas.height/2 - height/2);
+			data = context.getImageData(0, 0, canvas.width, canvas.height);
             context.clearRect(0, 0, canvas.width, canvas.height);
             for (var x = 0; x < data.width; x += diameter){
                 for (var y = 0; y < data.height; y += diameter){
@@ -156,7 +156,8 @@ $.partdem = function(elem, options, arg) {
     }
 
     function drawtext(context, text) {
-    	context.font = 968/text.length + 'px Heiti bold';
+        var fsize = 968/text.length;
+    	context.font =  `${fsize}px Heiti bold`;
     	context.fillStyle = 'rgba(168,168,168,1)';
     	context.textAlign = 'center';
     	context.textBaseline = 'middle';
