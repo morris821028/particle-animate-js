@@ -76,19 +76,14 @@ var Dot = function(centerX, centerY, centerZ, radius, color) {
     return that;
 }
 $.partdem = function(elem, options, arg) {
-	var canvas = document.getElementById('partdem'),
+	var canvas = document.getElementById($(elem).attr('id')),
 		context = canvas.getContext('2d');
 	var bgdots;
 	init(elem, options);
 
 	function init(elem, options) {
-		bgdots = bg_dots();
 		if (typeof(options.caption) != "undefined") {
-			if (isURL(options.caption[0])) {
-				options.dots = img2dots(options.caption[0]);
-			} else {
-				options.dots = text2dots(options.caption[0]);
-			}
+            deploy(0);
 		} else {
 			alert('no caption');
 		}
@@ -161,7 +156,7 @@ $.partdem = function(elem, options, arg) {
     }
 
     function drawtext(context, text) {
-    	context.font = 1024/text.length + 'px Heiti bold';
+    	context.font = 968/text.length + 'px Heiti bold';
     	context.fillStyle = 'rgba(168,168,168,1)';
     	context.textAlign = 'center';
     	context.textBaseline = 'middle';
@@ -173,6 +168,16 @@ $.partdem = function(elem, options, arg) {
             e.boom(canvas, context, 128, 1);
         });
         animate();
+    }
+
+    function deploy(index) {
+        if (index == 0)
+            bgdots = bg_dots();
+        if (isURL(options.caption[index])) {
+            options.dots = img2dots(options.caption[index]);
+        } else {
+            options.dots = text2dots(options.caption[index]);
+        }
     }
 
     function animate() {
@@ -190,15 +195,14 @@ $.partdem = function(elem, options, arg) {
     		if (!e.arrive(options.status)) {
     			e.step(options.status);
     			options.lastTime = new Date();
-    			if (options.status == -1 && options.base_z % 144 != 0)
-    				e.move();
     		} else {
     			if (options.thisTime - options.lastTime > 1000) {
     				if (options.status == -1 && options.base_z % 144 == 0) {
-    					if (options.caption_index+1 == options.caption.length)
+    					if (options.caption_index+1 == options.caption.length && !options.loop) {
     						options.pause = true;
-    					else
+    					} else {
     						run_next = true;
+                        }
     				} else if (options.status == -1 && options.base_z % 144 != 0) {
     					
     				} else if (options.status == 1) {
@@ -206,19 +210,16 @@ $.partdem = function(elem, options, arg) {
     				}
     			}
     		}
-    		if (options.status == -1 && options.base_z % 144 != 0)
+    		if (options.status == -1 && options.base_z % 144 != 0) {
     			e.move();
+                e.move();
+            }
             e.paint(canvas, context, 128);
         });
-        
+
 		if (run_next == true) {
-			options.caption_index = options.caption_index + 1;
-			if (isURL(options.caption[options.caption_index])) {
-				options.dots = img2dots(options.caption[options.caption_index]);
-			} else {
-				options.dots = text2dots(options.caption[options.caption_index]);
-				initAnimate();
-			}
+			options.caption_index = (options.caption_index+1)%options.caption.length;
+			deploy(options.caption_index);
 			options.status = - options.status;
 			options.base_z = 1;
 		} else if (options.status == -1 && options.base_z % 144 != 0) {
@@ -248,7 +249,7 @@ $.partdem = function(elem, options, arg) {
 };
 $.partdem.defaults = {
 	dots : [],
-	diameter: 10,
+	diameter: 8,
 	gap: 2, 
 	pause: false,
 	caption: undefined,
@@ -257,6 +258,7 @@ $.partdem.defaults = {
 	lastTime: new Date(),
 	status: 1,
 	caption_index: 0,
-	base_z: 1
+	base_z: 1,
+    loop: true
 };
 })(jQuery);
