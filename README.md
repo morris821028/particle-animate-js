@@ -1,5 +1,7 @@
 # particle-animate-js
 
+[Demo](http://morris821028.github.io/particle-animate-js/)
+
 ## Usage ##
 
 include js
