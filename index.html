@@ -1,0 +1,27 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        #partdem {
+            display: block;
+            border:1px solid;
+            margin:auto;
+        }
+        body {
+            background: #000;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="./js/particle-animate.js"></script>
+</head>
+<body>
+    <div witdh="100%">
+        <canvas id="partdem" width="1024px;" height="768px;"></canvas>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#partdem').partdem({caption: ['http://i.imgur.com/A2O21TC.png', '今すぐ キミに会いに行こう', '此刻我就去見你', 'END']});
+        });
+    </script>
+</body>
+</html>
